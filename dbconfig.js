@@ -1,14 +1,14 @@
 const config = {
-	user: 'root',
-	password: '123456',
-	server: 'DESKTOP-C1B662B',
-	database: 'ProyectoSonda_PIAIngenieria',
+	user: process.env.DBUSER,
+	password: process.env.DBPASS,
+	server: process.env.DBSERVER,
+	database: process.env.DBNAME,
 	options: {
 		trustedconnection: true,
 		enableArithAbort: true,
-		instancename: '',
+		instancename: process.env.DBINSTANCE,
 	},
-	port: 1433,
+	port: parseInt(process.env.DBPORT),
 };
 
 module.exports = config;
