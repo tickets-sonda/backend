@@ -6,8 +6,6 @@ var cors = require('cors');
 var app = express();
 var router = express.Router();
 
-
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cors());
@@ -45,7 +43,7 @@ router.route('/estados').get((request, response) => {
 
 router.route('/municipios').get((request, response) => {
 	dboperations.getMunicipios().then((result) => {
-		response.json(result);
+		response.json(result[0]);
 	});
 });
 
@@ -154,15 +152,22 @@ router.route('/usuarios/:id').get((request, response) => {
 
 // POST
 router.route('/estados').post((request, response) => {
-	let estado = {...request.body}
+	let estado = {...request.body};
 	dboperations.setEstado(estado).then((result) => {
 		response.status(201).json(result);
 	});
 });
 
 router.route('/empleados').post((request, response) => {
-	let empleado = {...request.body}
+	let empleado = {...request.body};
 	dboperations.setEmpleado(empleado).then((result) => {
+		response.status(201).json(result);
+	});
+});
+
+router.route('/auth/login').post((request, response) => {
+	let usuario = {...request.body};
+	dboperations.login(usuario).then((result) => {
 		response.status(201).json(result);
 	});
 });

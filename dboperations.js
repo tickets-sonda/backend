@@ -123,7 +123,7 @@ async function getUsuarios() {
 	}
 }
 
-// GET Especificos 
+// GET Especificos
 async function getEmpleado(id) {
 	try {
 		let pool = await sql.connect(config);
@@ -192,10 +192,7 @@ async function getServicio(id) {
 async function getMunicipio(id) {
 	try {
 		let pool = await sql.connect(config);
-		let product = await pool
-			.request()
-			.input('nidMunicipio', sql.Int, id)
-			.execute('sp_Municipio_Estado_ver');
+		let product = await pool.request().input('nidMunicipio', sql.Int, id).execute('sp_Municipio_Estado_ver');
 		return product.recordsets;
 	} catch (error) {
 		console.error(error);
@@ -268,11 +265,12 @@ async function getUsuario(id) {
 }
 
 // POST Especificos
-async function setEmpleado(empleado){
+async function setEmpleado(empleado) {
 	console.log(empleado);
 	try {
 		let pool = await sql.connect(config);
-		let insertProduct = await pool.request()
+		let insertProduct = await pool
+			.request()
 			.input('psNombre', sql.VarChar, empleado.Nombre)
 			.input('psPaterno', sql.VarChar, empleado.Paterno)
 			.input('psMaterno', sql.VarChar, empleado.Materno)
@@ -292,12 +290,25 @@ async function setEmpleado(empleado){
 	}
 }
 
-async function setEstado(estado){
+async function setEstado(estado) {
 	try {
 		let pool = await sql.connect(config);
-		let insertProduct = await pool.request()
-			.input('NombreEstado', sql.VarChar, estado.Nombre)
-			.execute('sp_Estado_Insertar');
+		let insertProduct = await pool.request().input('NombreEstado', sql.VarChar, estado.Nombre).execute('sp_Estado_Insertar');
+		return insertProduct.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+async function login(usuario) {
+	try {
+		let pool = await sql.connect(config);
+		let insertProduct = await pool
+			.request()
+			.input('psidUser', sql.VarChar, usuario.idUser)
+			.input('psClaveUsuario', sql.VarChar, usuario.ClaveUsuario)
+			.input('pnidTipoUsuario', sql.Int, usuario.idTipoUsuario)
+			.execute('sp_Usuario_Login');
 		return insertProduct.recordsets;
 	} catch (error) {
 		console.error(error);
@@ -329,4 +340,5 @@ module.exports = {
 	getUsuario: getUsuario,
 	setEmpleado: setEmpleado,
 	setEstado: setEstado,
+	login: login,
 };
