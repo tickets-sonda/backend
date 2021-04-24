@@ -12,13 +12,17 @@
    `npm install`
 3. Abrir el proyecto con editor de codigo y crear archivo `.env` y aqui establecer tu configuracion de tu base de datos. Necesitaras:
 
--   `PORT` : Puerto en el que quieras que corra tu API.
--   `DBUSER`: Usuario de la base de datos a conectar. (Debes tener habilitado SQL Server and Windows Authentication mode en tu SQL Server )
--   `DBPASS`: Contraseña de la base de datos a conectar.
--   `DBNAME`: Nombre de la base de datos a conectar.
--   `DBPORT`: Puerto de la base de datos a conectar (Necesitas tener habilitado el TCP/IP en la configuracion de SQL Server Network)
--   `DBINSTANCE`: Nombre de la instancia de la base de datos a conectar.
--   `DBSERVER`: Nombre o IP local de la base de datos a conectar (Si usas 127.0.0.1 sirve ya que es la IP local o tambien llamado localhost)
+    - `PORT` : Puerto en el que quieras que corra tu API.
+    - `DBUSER`: Usuario de la base de datos a conectar. (Debes tener habilitado SQL Server and Windows Authentication mode en tu SQL Server )
+    - `DBPASS`: Contraseña de la base de datos a conectar.
+    - `DBNAME`: Nombre de la base de datos a conectar.
+    - `DBPORT`: Puerto de la base de datos a conectar (Necesitas tener habilitado el TCP/IP en la configuracion de SQL Server Network)
+    - `DBINSTANCE`: Nombre de la instancia de la base de datos a conectar.
+    - `DBSERVER`: Nombre o IP local de la base de datos a conectar (Si usas 127.0.0.1 sirve ya que es la IP local o tambien llamado localhost)
+
+    Ejemplo de como se ve el archivo `.env`
+
+    ![image](https://user-images.githubusercontent.com/30633617/115970166-618dc580-a506-11eb-8ad0-eb4b596a5df7.png)
 
 4. Para correr el proyecto
    `npm run start`
