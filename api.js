@@ -168,7 +168,7 @@ router.route('/empleados').post((request, response) => {
 router.route('/auth/login').post((request, response) => {
 	let usuario = {...request.body};
 	dboperations.login(usuario).then((result) => {
-		response.status(201).json(result);
+		response.status(201).json(result[0][0]);
 	});
 });
 
