@@ -42,7 +42,10 @@ router.route('/estados').get((request, response) => {
 });
 
 router.route('/municipios').get((request, response) => {
-	dboperations.getMunicipios().then((result) => {
+	let municipios = {
+		idMunicipio: -1,
+	};
+	dboperations.getMunicipios(municipios).then((result) => {
 		response.json(result[0]);
 	});
 });
@@ -54,7 +57,10 @@ router.route('/servicios').get((request, response) => {
 });
 
 router.route('/sucursales').get((request, response) => {
-	dboperations.getSucursales().then((result) => {
+	let sucursales = {
+		id: -1,
+	};
+	dboperations.getSucursales(sucursales).then((result) => {
 		response.json(result[0]);
 	});
 });
@@ -151,24 +157,69 @@ router.route('/usuarios/:id').get((request, response) => {
 });
 
 // POST
-router.route('/estados').post((request, response) => {
+router.route('/registro/estado').post((request, response) => {
 	let estado = {...request.body};
 	dboperations.setEstado(estado).then((result) => {
-		response.status(201).json(result);
+		let body = {
+			Message: result[0][0][''],
+		};
+		response.status(201).json(body);
 	});
 });
 
-router.route('/empleados').post((request, response) => {
+router.route('/registro/empleado').post((request, response) => {
 	let empleado = {...request.body};
 	dboperations.setEmpleado(empleado).then((result) => {
-		response.status(201).json(result);
+		let body = {
+			Message: result[0][0][''],
+		};
+		response.status(201).json(body);
+	});
+});
+
+router.route('/registro/tipo-servicio').post((request, response) => {
+	let tipoServicio = {...request.body};
+	dboperations.setTipoServicio(tipoServicio).then((result) => {
+		let body = {
+			Message: result[0][0][''],
+		};
+		response.status(201).json(body);
+	});
+});
+
+router.route('/registro/municipio').post((request, response) => {
+	let municipio = {...request.body};
+	dboperations.setMunicipio(municipio).then((result) => {
+		let body = {
+			Message: result[0][0][''],
+		};
+		response.status(201).json(body);
 	});
 });
 
 router.route('/auth/login').post((request, response) => {
 	let usuario = {...request.body};
 	dboperations.login(usuario).then((result) => {
-		response.status(201).json(result[0][0]);
+		let body;
+		if (result[0][0]['']) {
+			body = {
+				Message: result[0][0][''],
+			};
+			response.status(201).json(body);
+		} else {
+			response.status(201).json(result[0][0]);
+		}
+	});
+});
+
+// DELETE
+router.route('/eliminar/empleados/:id').delete((request, response) => {
+	let empleado = {...request.params};
+	dboperations.deleteEmpleado(empleado).then((result) => {
+		let body = {
+			Message: result[0][0][''],
+		};
+		response.status(201).json(body);
 	});
 });
 

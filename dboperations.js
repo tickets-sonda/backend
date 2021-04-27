@@ -47,10 +47,10 @@ async function getEstados() {
 	}
 }
 
-async function getMunicipios() {
+async function getMunicipios(municipios) {
 	try {
 		let pool = await sql.connect(config);
-		let products = await pool.request().query('SELECT * FROM Municipio');
+		let products = await pool.request().input('nidMunicipio', sql.Int, municipios.idMunicipio).execute('sp_Municipio_Estado_ver');
 		return products.recordsets;
 	} catch (error) {
 		console.error(error);
@@ -68,10 +68,10 @@ async function getServicios() {
 	}
 }
 
-async function getSucursales() {
+async function getSucursales(sucursales) {
 	try {
 		let pool = await sql.connect(config);
-		let products = await pool.request().query('SELECT * FROM Sucursal');
+		let products = await pool.request().input('nidSucursal', sql.Int, sucursales.id).execute('sp_Sucursal_ver');
 
 		return products.recordsets;
 	} catch (error) {
@@ -200,12 +200,10 @@ async function getMunicipio(id) {
 }
 
 async function getSucursal(id) {
+	console.log('getsucursal id', id);
 	try {
 		let pool = await sql.connect(config);
-		let product = await pool
-			.request()
-			.input('input_parameter', sql.Int, id)
-			.query('SELECT * from Sucursal where idSucursal = @input_parameter');
+		let product = await pool.request().input('nidSucursal', sql.Int, id).execute('sp_Sucursal_ver');
 		return product.recordsets;
 	} catch (error) {
 		console.error(error);
@@ -293,7 +291,36 @@ async function setEmpleado(empleado) {
 async function setEstado(estado) {
 	try {
 		let pool = await sql.connect(config);
-		let insertProduct = await pool.request().input('NombreEstado', sql.VarChar, estado.Nombre).execute('sp_Estado_Insertar');
+		let insertProduct = await pool.request().input('psNombreEstado', sql.VarChar, estado.Nombre).execute('sp_Estado_Insertar');
+		return insertProduct.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+async function setTipoServicio(tipoServicio) {
+	console.log(tipoServicio);
+	try {
+		let pool = await sql.connect(config);
+		let insertProduct = await pool
+			.request()
+			.input('psNombreTipoServicio', sql.VarChar, tipoServicio.Nombre)
+			.execute('sp_TipoServicio_Insert');
+		return insertProduct.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+async function setMunicipio(municipio) {
+	console.log(municipio);
+	try {
+		let pool = await sql.connect(config);
+		let insertProduct = await pool
+			.request()
+			.input('NombreMunicipio', sql.VarChar, municipio.Nombre)
+			.input('idEstado', sql.Int, municipio.idEstado)
+			.execute('sp_Municipio_Insert');
 		return insertProduct.recordsets;
 	} catch (error) {
 		console.error(error);
@@ -307,9 +334,21 @@ async function login(usuario) {
 			.request()
 			.input('psidUser', sql.VarChar, usuario.idUser)
 			.input('psClaveUsuario', sql.VarChar, usuario.ClaveUsuario)
-			.input('pnidTipoUsuario', sql.Int, usuario.idTipoUsuario)
+			.input('pnidTipoUsuario', sql.Int, parseInt(usuario.idTipoUsuario))
 			.execute('sp_Usuario_Login');
 		return insertProduct.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+// DELETE
+
+async function deleteEmpleado(empleado) {
+	try {
+		let pool = await sql.connect(config);
+		let deleteProduct = await pool.request().input('pnNoEmpleado', sql.Int, empleado.id).execute('sp_Empleado_Delete');
+		return deleteProduct.recordsets;
 	} catch (error) {
 		console.error(error);
 	}
@@ -341,4 +380,7 @@ module.exports = {
 	setEmpleado: setEmpleado,
 	setEstado: setEstado,
 	login: login,
+	setTipoServicio: setTipoServicio,
+	setMunicipio: setMunicipio,
+	deleteEmpleado: deleteEmpleado,
 };
