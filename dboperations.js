@@ -57,11 +57,16 @@ async function getMunicipios(municipios) {
 	}
 }
 
-async function getServicios() {
+async function getServicios(servicio) {
+	console.log(servicio);
 	try {
 		let pool = await sql.connect(config);
-		let products = await pool.request().query('SELECT * FROM Servicio');
-
+		let products = await pool
+			.request()
+			.input('psidUser', sql.VarChar, servicio.idUser)
+			.input('psEstatus', sql.VarChar, servicio.Estatus)
+			.input('psVariable', sql.VarChar, servicio.Variable)
+			.execute('sp_TablasVistaDeServicios');
 		return products.recordsets;
 	} catch (error) {
 		console.error(error);
@@ -166,10 +171,7 @@ async function getEquipoRefaccion(id) {
 async function getEstado(id) {
 	try {
 		let pool = await sql.connect(config);
-		let product = await pool
-			.request()
-			.input('input_parameter', sql.Int, id)
-			.query('SELECT * from Estado where idEstado = @input_parameter');
+		let product = await pool.request().input('input_parameter', sql.Int, id).query('SELECT * from Estado where idEstado = @input_parameter');
 		return product.recordsets;
 	} catch (error) {
 		console.error(error);
@@ -342,6 +344,26 @@ async function login(usuario) {
 	}
 }
 
+async function setServicio(servicio) {
+	console.log(servicio);
+	try {
+		let pool = await sql.connect(config);
+		let insertProduct = await pool
+			.request()
+			.input('pnIdEmpresaCliente', sql.Int, servicio.idEmpresaCliente)
+			.input('psIdUser', sql.VarChar, servicio.idUser)
+			.input('pdFechaSolicitud', sql.DateTime, servicio.FechaSolicitud)
+			.input('psAsunto', sql.VarChar, servicio.Asunto)
+			.input('psResponsableSitio', sql.VarChar, servicio.ResponsableSitio)
+			.input('pidSucursal', sql.Int, servicio.Sucursal)
+			.input('psEmail', sql.VarChar, servicio.Email)
+			.execute('sp_EnviarSolicitud_ServicioInsert_1');
+		return insertProduct.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
 // DELETE
 
 async function deleteEmpleado(empleado) {
@@ -383,4 +405,5 @@ module.exports = {
 	setTipoServicio: setTipoServicio,
 	setMunicipio: setMunicipio,
 	deleteEmpleado: deleteEmpleado,
+	setServicio: setServicio,
 };

@@ -51,8 +51,18 @@ router.route('/municipios').get((request, response) => {
 });
 
 router.route('/servicios').get((request, response) => {
-	dboperations.getServicios().then((result) => {
-		response.json(result[0]);
+	let servicios = {...request.body};
+	dboperations.getServicios(servicios).then((result) => {
+		let body;
+		console.log(result);
+		// if (result[0][0]['']) {
+		// 	body = {
+		// 		Message: result[0][0][''],
+		// 	};
+		// 	response.status(201).json(body);
+		// } else {
+		// 	response.status(201).json(result[0][0]);
+		// }
 	});
 });
 
@@ -209,6 +219,18 @@ router.route('/auth/login').post((request, response) => {
 		} else {
 			response.status(201).json(result[0][0]);
 		}
+	});
+});
+
+router.route('/registro/servicio').post((request, response) => {
+	let servicio = {...request.body};
+	console.log(servicio);
+	dboperations.setServicio(servicio).then((result) => {
+		console.log(result);
+		let body = {
+			Message: result[0][0][''],
+		};
+		response.status(201).json(body);
 	});
 });
 
