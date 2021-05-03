@@ -350,12 +350,12 @@ async function setServicio(servicio) {
 		let pool = await sql.connect(config);
 		let insertProduct = await pool
 			.request()
-			.input('pnIdEmpresaCliente', sql.Int, servicio.idEmpresaCliente)
+			.input('pnIdEmpresaCliente', sql.Int, parseInt(servicio.idEmpresaCliente))
 			.input('psIdUser', sql.VarChar, servicio.idUser)
 			.input('pdFechaSolicitud', sql.DateTime, servicio.FechaSolicitud)
 			.input('psAsunto', sql.VarChar, servicio.Asunto)
 			.input('psResponsableSitio', sql.VarChar, servicio.ResponsableSitio)
-			.input('pidSucursal', sql.Int, servicio.Sucursal)
+			.input('pidSucursal', sql.Int, parseInt(servicio.Sucursal))
 			.input('psEmail', sql.VarChar, servicio.Email)
 			.execute('sp_EnviarSolicitud_ServicioInsert_1');
 		return insertProduct.recordsets;
