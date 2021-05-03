@@ -76,7 +76,7 @@ async function getServicios(servicio) {
 async function getSucursales(sucursales) {
 	try {
 		let pool = await sql.connect(config);
-		let products = await pool.request().input('nidSucursal', sql.Int, sucursales.id).execute('sp_Sucursal_ver');
+		let products = await pool.request().input('idUsuario', sql.VarChar, sucursales.idUser).execute('sp_CrearSolicitud_SucursalCombo');
 
 		return products.recordsets;
 	} catch (error) {

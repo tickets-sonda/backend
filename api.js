@@ -66,12 +66,21 @@ router.route('/servicios').get((request, response) => {
 	});
 });
 
-router.route('/sucursales').get((request, response) => {
+router.route('/sucursales').post((request, response) => {
 	let sucursales = {
-		id: -1,
+		...request.body,
 	};
 	dboperations.getSucursales(sucursales).then((result) => {
-		response.json(result[0]);
+		console.log(result);
+		let body;
+		if (result[0][0]['']) {
+			body = {
+				Message: result[0][0][''],
+			};
+			response.status(201).json(body);
+		} else {
+			response.status(201).json(result[0]);
+		}
 	});
 });
 
