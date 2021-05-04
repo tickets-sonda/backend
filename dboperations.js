@@ -264,6 +264,29 @@ async function getUsuario(id) {
 	}
 }
 
+async function getDetalle(id) {
+	try {
+		let pool = await sql.connect(config);
+		let product = await pool.request().input('pnNoServicio', sql.Int, id).execute('sp_ConsultaParaDetalle');
+		return product.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+async function getEmailServicio(id) {
+	try {
+		let pool = await sql.connect(config);
+		let product = await pool
+			.request()
+			.input('input_parameter', sql.VarChar, id)
+			.query('SELECT NoServicio, Email from Servicio where NoServicio = @input_parameter');
+		return product.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
 // POST Especificos
 async function setEmpleado(empleado) {
 	console.log(empleado);
@@ -364,6 +387,24 @@ async function setServicio(servicio) {
 	}
 }
 
+async function getTablas(parametros) {
+	console.log(parametros);
+	try {
+		let pool = await sql.connect(config);
+		let insertProduct = await pool
+			.request()
+			.input('psEstatus', sql.VarChar,parametros.estatus)
+			.input('psIdUser', sql.VarChar, parametros.idUser)
+	
+			.execute('sp_TablasVistaDeServicios');
+		return insertProduct.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+
+
 // DELETE
 
 async function deleteEmpleado(empleado) {
@@ -406,4 +447,7 @@ module.exports = {
 	setMunicipio: setMunicipio,
 	deleteEmpleado: deleteEmpleado,
 	setServicio: setServicio,
+	getTablas: getTablas,
+	getDetalle: getDetalle,
+	getEmailServicio: getEmailServicio
 };
