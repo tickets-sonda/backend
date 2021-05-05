@@ -46,6 +46,7 @@ router.route('/municipios').get((request, response) => {
 		idMunicipio: -1,
 	};
 	dboperations.getMunicipios(municipios).then((result) => {
+		console.log(result);
 		response.json(result[0]);
 	});
 });
@@ -176,7 +177,7 @@ router.route('/usuarios/:id').get((request, response) => {
 });
 
 router.route('/detalle/:id').get((request, response) => {
-	console.log(request.params.id)
+	console.log(request.params.id);
 	dboperations.getDetalle(request.params.id).then((result) => {
 		response.json(result[0][0]);
 	});
@@ -196,30 +197,45 @@ router.route('/registro/estado').post((request, response) => {
 router.route('/registro/empleado').post((request, response) => {
 	let empleado = {...request.body};
 	dboperations.setEmpleado(empleado).then((result) => {
-		let body = {
-			Message: result[0][0][''],
-		};
-		response.status(201).json(body);
+		let body;
+		if (result[0][0]['']) {
+			body = {
+				Message: result[0][0][''],
+			};
+			response.status(201).json(body);
+		} else {
+			response.status(201).json(result[0][0]);
+		}
 	});
 });
 
 router.route('/registro/tipo-servicio').post((request, response) => {
 	let tipoServicio = {...request.body};
 	dboperations.setTipoServicio(tipoServicio).then((result) => {
-		let body = {
-			Message: result[0][0][''],
-		};
-		response.status(201).json(body);
+		let body;
+		if (result[0][0]['']) {
+			body = {
+				Message: result[0][0][''],
+			};
+			response.status(201).json(body);
+		} else {
+			response.status(201).json(result[0][0]);
+		}
 	});
 });
 
 router.route('/registro/municipio').post((request, response) => {
 	let municipio = {...request.body};
 	dboperations.setMunicipio(municipio).then((result) => {
-		let body = {
-			Message: result[0][0][''],
-		};
-		response.status(201).json(body);
+		let body;
+		if (result[0][0]['']) {
+			body = {
+				Message: result[0][0][''],
+			};
+			response.status(201).json(body);
+		} else {
+			response.status(201).json(result[0][0]);
+		}
 	});
 });
 
@@ -242,16 +258,20 @@ router.route('/registro/servicio').post((request, response) => {
 	let servicio = {...request.body};
 	console.log(servicio);
 	dboperations.setServicio(servicio).then((result) => {
-		console.log(result);
-		let body = {
-			Message: result[0][0][''],
-		};
-		response.status(201).json(body);
+		let body;
+		if (result[0][0]['']) {
+			body = {
+				Message: result[0][0][''],
+			};
+			response.status(201).json(body);
+		} else {
+			response.status(201).json(result[0][0]);
+		}
 	});
 });
 
 router.route('/tablas').post((request, response) => {
-	console.log(request.body)
+	console.log(request.body);
 	let tablas = {...request.body};
 	console.log(tablas);
 	dboperations.getTablas(tablas).then((result) => {

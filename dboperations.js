@@ -48,6 +48,7 @@ async function getEstados() {
 }
 
 async function getMunicipios(municipios) {
+	console.log('municipios', municipios);
 	try {
 		let pool = await sql.connect(config);
 		let products = await pool.request().input('nidMunicipio', sql.Int, municipios.idMunicipio).execute('sp_Municipio_Estado_ver');
@@ -289,7 +290,6 @@ async function getEmailServicio(id) {
 
 // POST Especificos
 async function setEmpleado(empleado) {
-	console.log(empleado);
 	try {
 		let pool = await sql.connect(config);
 		let insertProduct = await pool
@@ -306,6 +306,8 @@ async function setEmpleado(empleado) {
 			.input('pdFechaNacimiento', sql.DateTime, empleado.FechaNacimiento)
 			.input('psMetodoTransporte', sql.VarChar, empleado.MetodoTransporte)
 			.input('psSexo', sql.VarChar, empleado.Sexo)
+			.input('pnTipoUsuario', sql.Int, empleado.TipoUsuario)
+			.input('pnClaveUser', sql.Int, empleado.ClaveUser)
 			.execute('sp_Empleado_Insertar');
 		return insertProduct.recordsets;
 	} catch (error) {
@@ -393,17 +395,14 @@ async function getTablas(parametros) {
 		let pool = await sql.connect(config);
 		let insertProduct = await pool
 			.request()
-			.input('psEstatus', sql.VarChar,parametros.estatus)
+			.input('psEstatus', sql.VarChar, parametros.estatus)
 			.input('psIdUser', sql.VarChar, parametros.idUser)
-	
 			.execute('sp_TablasVistaDeServicios');
 		return insertProduct.recordsets;
 	} catch (error) {
 		console.error(error);
 	}
 }
-
-
 
 // DELETE
 
@@ -449,5 +448,5 @@ module.exports = {
 	setServicio: setServicio,
 	getTablas: getTablas,
 	getDetalle: getDetalle,
-	getEmailServicio: getEmailServicio
+	getEmailServicio: getEmailServicio,
 };
