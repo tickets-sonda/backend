@@ -164,6 +164,13 @@ router.route('/tipos-servicio/:id').get((request, response) => {
 	});
 });
 
+router.route('/empresa-cliente/users').get((request, response) => {
+	dboperations.getEmpresaClienteUsers().then((result) => {
+		console.log(result);
+		response.json(result[0]);
+	});
+});
+
 router.route('/tipos-usuario/:id').get((request, response) => {
 	dboperations.getTipoUsuario(request.params.id).then((result) => {
 		response.json(result[0]);
@@ -227,6 +234,22 @@ router.route('/registro/tipo-servicio').post((request, response) => {
 router.route('/registro/municipio').post((request, response) => {
 	let municipio = {...request.body};
 	dboperations.setMunicipio(municipio).then((result) => {
+		let body;
+		if (result[0][0]['']) {
+			body = {
+				Message: result[0][0][''],
+			};
+			response.status(201).json(body);
+		} else {
+			response.status(201).json(result[0][0]);
+		}
+	});
+});
+
+router.route('/registro/empresa-cliente').post((request, response) => {
+	let empresa = {...request.body};
+	console.log('Empresa route', empresa);
+	dboperations.setEmpresaCliente(empresa).then((result) => {
 		let body;
 		if (result[0][0]['']) {
 			body = {

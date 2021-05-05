@@ -288,6 +288,20 @@ async function getEmailServicio(id) {
 	}
 }
 
+async function getEmpresaClienteUsers() {
+	try {
+		let pool = await sql.connect(config);
+		let product = await pool
+			.request()
+			.query(
+				'Select c.idEmpresaCliente, c.NombreCliente, c.Telefono, c.Email, c.DescripcionRama, u.idUser From EmpresaCliente as C Inner join Usuario as U on c.idEmpresaCliente = u.idEmpresaCliente'
+			);
+		return product.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
 // POST Especificos
 async function setEmpleado(empleado) {
 	try {
@@ -348,6 +362,24 @@ async function setMunicipio(municipio) {
 			.input('NombreMunicipio', sql.VarChar, municipio.Nombre)
 			.input('idEstado', sql.Int, municipio.idEstado)
 			.execute('sp_Municipio_Insert');
+		return insertProduct.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+async function setEmpresaCliente(empresa) {
+	console.log(empresa);
+	try {
+		let pool = await sql.connect(config);
+		let insertProduct = await pool
+			.request()
+			.input('psNombreCliente', sql.VarChar, empresa.NombreCliente)
+			.input('psTelefono', sql.VarChar, empresa.Telefono)
+			.input('psEmail', sql.VarChar, empresa.Email)
+			.input('psDescripcionRama', sql.VarChar, empresa.DescripcionRama)
+			.input('pnClaveEmpresa', sql.Int, empresa.ClaveEmpresa)
+			.execute('sp_EmpresaCliente_Insert');
 		return insertProduct.recordsets;
 	} catch (error) {
 		console.error(error);
@@ -449,4 +481,6 @@ module.exports = {
 	getTablas: getTablas,
 	getDetalle: getDetalle,
 	getEmailServicio: getEmailServicio,
+	setEmpresaCliente: setEmpresaCliente,
+	getEmpresaClienteUsers: getEmpresaClienteUsers,
 };
