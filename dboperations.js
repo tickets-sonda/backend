@@ -294,7 +294,7 @@ async function getEmpresaClienteUsers() {
 		let product = await pool
 			.request()
 			.query(
-				'Select c.idEmpresaCliente, c.NombreCliente, c.Telefono, c.Email, c.DescripcionRama, u.idUser From EmpresaCliente as C Inner join Usuario as U on c.idEmpresaCliente = u.idEmpresaCliente'
+				'Select c.idEmpresaCliente, c.NombreCliente, c.Telefono, c.Email, c.DescripcionRama, u.idUser From EmpresaCliente as C Inner join Usuario as U on c.idEmpresaCliente = u.idEmpresaCliente ORDER BY idEmpresaCliente'
 			);
 		return product.recordsets;
 	} catch (error) {
