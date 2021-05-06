@@ -1,4 +1,4 @@
-require('dotenv').config();
+var config = require('dotenv').config();
 const dboperations = require('./dboperations');
 var express = require('express');
 var bodyParser = require('body-parser');

@@ -1,4 +1,4 @@
-const config = {
+const configuration = {
 	user: process.env.DBUSER,
 	password: process.env.DBPASS,
 	server: process.env.DBSERVER,
@@ -11,4 +11,4 @@ const config = {
 	port: parseInt(process.env.DBPORT),
 };
 
-module.exports = config;
+module.exports = configuration;
