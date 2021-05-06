@@ -339,6 +339,22 @@ async function setEstado(estado) {
 	}
 }
 
+async function setSucursal(sucursal) {
+	try {
+		let pool = await sql.connect(config);
+		let insertProduct = await pool
+			.request()
+			.input('psidEmpresaCliente', sql.Int, sucursal.EmpresaCliente)
+			.input('psUbicacion', sql.VarChar, sucursal.Ubicacion)
+			.input('psSitio', sql.VarChar, sucursal.Sitio)
+			.input('psNombreMunicipio', sql.VarChar, sucursal.NombreMunicipio)
+			.execute('sp_Sucursal_Insertar');
+		return insertProduct.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
 async function setTipoServicio(tipoServicio) {
 	console.log(tipoServicio);
 	try {
@@ -483,4 +499,5 @@ module.exports = {
 	getEmailServicio: getEmailServicio,
 	setEmpresaCliente: setEmpresaCliente,
 	getEmpresaClienteUsers: getEmpresaClienteUsers,
+	setSucursal: setSucursal,
 };

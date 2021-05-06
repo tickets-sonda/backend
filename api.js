@@ -311,6 +311,24 @@ router.route('/tablas').post((request, response) => {
 	});
 });
 
+router.route('/registro/sucursal').post((request, response) => {
+	console.log(request.body);
+	let sucursal = {...request.body};
+	console.log(sucursal);
+	dboperations.setSucursal(sucursal).then((result) => {
+		console.log(result);
+		let body;
+		if (result[0][0]['']) {
+			body = {
+				Message: result[0][0][''],
+			};
+			response.status(201).json(body);
+		} else {
+			response.status(201).json(result[0]);
+		}
+	});
+});
+
 // DELETE
 router.route('/eliminar/empleados/:id').delete((request, response) => {
 	let empleado = {...request.params};
