@@ -437,6 +437,44 @@ async function setServicio(servicio) {
 	}
 }
 
+async function getContador(empleado) {
+	console.log('empleado ', empleado);
+	try {
+		let pool = await sql.connect(config);
+		let insertProduct = await pool
+			.request()
+			.input('idUser', sql.VarChar, empleado.NoEmpleado)
+			.execute('sp_ContdorServiciosTerm_Pendientes_Totales');
+		return insertProduct.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+async function setServicioEstatus(servicio) {
+	console.log(servicio);
+	try {
+		let pool = await sql.connect(config);
+		let insertProduct = await pool
+			.request()
+			.input('psAccion', sql.VarChar, servicio.Accion)
+			.input('pnNoServicioA', sql.Int, servicio.NoServicioA)
+			.input('psPrioridad', sql.VarChar, servicio.Prioridad)
+			.input('pnIdTipoServicio', sql.Int, servicio.IdTipoServicio)
+			.input('pdFechaAsignacion', sql.DateTime, servicio.FechaAsignacion)
+			.input('psHerramientas', sql.VarChar, servicio.Herramientas)
+			.input('psDescripcion', sql.VarChar, servicio.Descripcion)
+			.input('pnNumSerieProducto', sql.VarChar, servicio.NumSerieProducto)
+			.input('idTipoMovProducto', sql.Int, servicio.idTipoMovProducto)
+			.input('pnNoEmpleadoAsig', sql.Int, servicio.NoEmpleadoAsig)
+			.input('pnNoEmpleadoInvi', sql.Int, servicio.NoEmpleadoInvi)
+			.execute('sp_UpdateServicioEstatus');
+		return insertProduct.recordsets;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
 async function getTablas(parametros) {
 	console.log(parametros);
 	try {
@@ -500,4 +538,6 @@ module.exports = {
 	setEmpresaCliente: setEmpresaCliente,
 	getEmpresaClienteUsers: getEmpresaClienteUsers,
 	setSucursal: setSucursal,
+	setServicioEstatus: setServicioEstatus,
+	getContador: getContador,
 };

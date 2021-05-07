@@ -231,6 +231,38 @@ router.route('/registro/tipo-servicio').post((request, response) => {
 	});
 });
 
+router.route('/update/servicio-estatus').post((request, response) => {
+	let servicio = {...request.body};
+	dboperations.setServicioEstatus(servicio).then((result) => {
+		console.log(result);
+		let body;
+		if (result[0][0]['']) {
+			body = {
+				Message: result[0][0][''],
+			};
+			response.status(201).json(body);
+		} else {
+			response.status(201).json(result[0][0]);
+		}
+	});
+});
+
+router.route('/contador').post((request, response) => {
+	let empleado = {...request.body};
+	dboperations.getContador(empleado).then((result) => {
+		console.log(result);
+		let body;
+		if (result[0][0]['']) {
+			body = {
+				Message: result[0][0][''],
+			};
+			response.status(201).json(body);
+		} else {
+			response.status(201).json(result[0][0]);
+		}
+	});
+});
+
 router.route('/registro/municipio').post((request, response) => {
 	let municipio = {...request.body};
 	dboperations.setMunicipio(municipio).then((result) => {
